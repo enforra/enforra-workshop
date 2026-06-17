@@ -1,0 +1,41 @@
+version: 1
+defaults:
+  decision: log_only
+policies:
+  - id: allow-customer-lookups
+    description: "Allow checking customer details"
+    match:
+      tool: get_customer
+    decision: allow
+
+  - id: allow-small-refunds
+    description: "Allow refunds <= 100"
+    match:
+      tool: issue_refund
+    conditions:
+      - field: args.amount
+        operator: lte
+        value: 100
+    decision: allow
+
+  - id: require-approval-for-large-refunds
+    description: "Require human review for refunds > 100"
+    match:
+      tool: issue_refund
+    conditions:
+      - field: args.amount
+        operator: gt
+        value: 100
+    decision: require_approval
+
+  - id: block-customer-deletion
+    description: "Block deletion of customer records entirely"
+    match:
+      tool: delete_customer_data
+    decision: block
+
+  - id: log-outbound-emails
+    description: "Allow but audit outbound emails"
+    match:
+      tool: send_email
+    decision: log_only

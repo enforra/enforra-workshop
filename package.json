@@ -1,0 +1,20 @@
+{
+  "name": "enforra-agent-runtime-workshop",
+  "version": "1.0.0",
+  "description": "Enforra Agent Runtime Control Workshop",
+  "type": "module",
+  "main": "src/tool-runner-after.js",
+  "scripts": {
+    "before": "node src/tool-runner-before.js",
+    "after": "node src/tool-runner-after.js",
+    "demo": "node src/scenarios.js demo",
+    "clean": "node src/audit.js clean",
+    "test": "node src/scenarios.js test"
+  },
+  "dependencies": {
+    "yaml": "^2.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
