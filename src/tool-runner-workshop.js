@@ -1,6 +1,6 @@
 import { getAgentPlannedActions } from "./agent.js";
 import { tools } from "./tools.js";
-// TODO 1: Import createEnforraClient from "@enforra/sdk-node"
+// TODO 1: Import { createEnforraClient } from "@enforra/sdk-node"
 
 /**
  * Runs the simulated agent scenarios through the Enforra runtime control layer.
@@ -38,13 +38,20 @@ export async function runWorkshop() {
     }
 
     try {
-      // TODO 3: Wrap the tool call with enforra.enforceToolCall
-      // TODO 4: Pass agent, tool, args, context, and the execute callback
-      // The execute callback should execute the actual tool (e.g. tools[toolName](args))
-      const result = { decision: "allow" }; // Replace this with the enforra.enforceToolCall call
+      // TODO 3: Replace this fake result with enforra.enforceToolCall(...)
+      //
+      // Pass:
+      // - agent: "support-agent"
+      // - tool: toolName
+      // - args
+      // - context: { environment: "workshop" }
+      // - execute: an async callback that runs the actual tool
+      //
+      // The important part:
+      // the real tool call should happen inside execute, not before Enforra checks policy.
+      const result = { decision: "allow" };
 
-      // TODO 5: Print the decision result (e.g., result.decision)
-      // and handle logging for 'block', 'require_approval', and 'log_only'
+      // Print the Enforra decision and explain what happened.
       console.log(`Enforra decision: ${result.decision}`);
 
       if (result.decision === "block") {
