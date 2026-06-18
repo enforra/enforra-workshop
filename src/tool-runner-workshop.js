@@ -7,7 +7,12 @@ import { tools } from "./tools.js";
  * Fill in the TODOs below to integrate the real Enforra SDK!
  */
 export async function runWorkshop() {
-  console.log("\nWITH ENFORRA RUNTIME CONTROL (WORKSHOP EXERCISE)\n");
+  console.log("\nWORKSHOP EXERCISE: ENFORRA NOT ADDED YET\n");
+  console.log("This file is intentionally incomplete.");
+  console.log("Your task is to add Enforra before tool execution.");
+  console.log(
+    "For the completed version, compare with solution/tool-runner-workshop.js or run: npm run solution\n",
+  );
 
   // TODO 2: Initialize the Enforra client using createEnforraClient
   // Pass policyPath: "./policy.yaml" and auditPath: ".enforra/audit.jsonl"
