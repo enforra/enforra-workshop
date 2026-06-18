@@ -1,10 +1,10 @@
-import { getAgentPlannedActions } from "./agent.js";
-import { tools } from "./tools.js";
+import { getAgentPlannedActions } from "../src/agent.js";
+import { tools } from "../src/tools.js";
 import { createEnforraClient } from "@enforra/sdk-node";
 
 /**
  * Runs the simulated agent scenarios through the Enforra runtime control layer.
- * Evaluates decisions using the real @enforra/sdk-node package based on policy.yaml.
+ * Completed reference version of the workshop exercise using the real Enforra SDK.
  */
 export async function runAfter() {
   console.log("\nWITH ENFORRA RUNTIME CONTROL\n");

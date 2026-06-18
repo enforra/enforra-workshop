@@ -1,5 +1,5 @@
 import { runBefore } from "./tool-runner-before.js";
-import { runAfter } from "./tool-runner-after.js";
+import { runAfter } from "../solution/tool-runner-workshop.js";
 import fs from "node:fs";
 
 export const scenarios = [

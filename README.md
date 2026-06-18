@@ -66,8 +66,8 @@ find the line where the selected tool is about to execute, then check policy bef
 - `src/tool-runner-workshop.js`  
   The attendee exercise file. You will add the runtime control checks here.
 
-- `src/tool-runner-after.js`  
-  Runs the agent with a policy check before tool execution (completed version).
+- `solution/tool-runner-workshop.js`  
+  The completed reference solution using the real Enforra SDK.
 
 - `policy.yaml`  
   The runtime policy.
@@ -77,10 +77,23 @@ find the line where the selected tool is about to execute, then check policy bef
 
 ---
 
-## Prerequisites
+## Before the workshop
 
-- **Node.js** 20+
-- **npm**
+Please install:
+
+- Node.js 20 or newer
+- npm
+- Git
+
+Check your setup:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+If `node -v` shows a version below 20, please install Node.js 20 or newer before the workshop.
 
 ---
 
@@ -96,11 +109,35 @@ _Note: Running `npm install` installs the real `@enforra/sdk-node` package from 
 
 ---
 
+## Reference solution
+
+The hands-on file is:
+
+```bash
+src/tool-runner-workshop.js
+```
+
+If you get stuck, compare it with the completed version:
+
+```bash
+solution/tool-runner-workshop.js
+```
+
+Do not start in the `solution/` folder. It is only a reference.
+
+To run the completed version from the repo root:
+
+```bash
+npm run solution
+```
+
+---
+
 ## Where the SDK is used
 
 - **Attendee Exercise File**: `src/tool-runner-workshop.js`  
   You will import and configure `@enforra/sdk-node` here.
-- **Reference Solution**: `src/tool-runner-after.js`  
+- **Reference Solution**: `solution/tool-runner-workshop.js`  
   A completed reference implementation of the Enforra SDK.
 
 ---
@@ -115,31 +152,39 @@ npm run before
 
 In this version, the agent calls tools directly. Notice that even risky actions can execute.
 
-### Step 2: Open the unsafe tool runner
+### Step 2: Open the unsafe runner
 
-Open `src/tool-runner-before.js` and locate the line where the selected tool is called directly.
+```bash
+src/tool-runner-before.js
+```
 
-### Step 3: Open the policy file
+Locate the line where the selected tool is called directly.
 
-Open `policy.yaml` and explain the decisions.
+### Step 3: Open the policy
 
-### Step 4: Add runtime control
+```bash
+policy.yaml
+```
 
-Open:
+The policy controls what happens before each tool runs. Explain the decisions.
 
-`src/tool-runner-workshop.js`
+### Step 4: Open the hands-on file
 
-This is the main hands-on exercise.
+```bash
+src/tool-runner-workshop.js
+```
 
-You will fill in the TODOs to:
+### Step 5: Add Enforra before tool execution
 
-- Import the Enforra client from `@enforra/sdk-node`
-- Create the Enforra client using `policy.yaml` and `.enforra/audit.jsonl`
-- Wrap each tool call with `enforceToolCall`
-- Pass agent, tool, args, context, and execute callback
-- Print decision result and show whether the tool executed
+Attendees should complete the TODOs to:
 
-### Step 5: Run the workshop file
+- Create the Enforra client
+- Call Enforra before tool execution
+- Block blocked actions
+- Pause actions that require approval
+- Execute only allowed or logged actions
+
+### Step 6: Run their implementation
 
 ```bash
 npm run workshop
@@ -147,15 +192,19 @@ npm run workshop
 
 Observe the output to verify if the policy checks are working correctly.
 
-### Step 6: Stuck? Check the solution
+### Step 7: If stuck, compare with:
 
-If you get stuck, compare your implementation with `src/tool-runner-after.js` or run the completed solution directly:
+```bash
+solution/tool-runner-workshop.js
+```
+
+or run the completed solution directly:
 
 ```bash
 npm run solution
 ```
 
-### Step 7: View the audit log
+### Step 8: View the audit log
 
 ```bash
 cat .enforra/audit.jsonl
@@ -163,7 +212,7 @@ cat .enforra/audit.jsonl
 
 The audit log shows what the agent tried to do, what decision was made, and whether the tool executed.
 
-### Step 8: Change one policy rule and test it
+### Step 9: Change one policy rule in `policy.yaml` and rerun:
 
 Change one rule in `policy.yaml`:
 

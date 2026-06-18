@@ -6,9 +6,9 @@
   "main": "src/tool-runner-after.js",
   "scripts": {
     "before": "node src/tool-runner-before.js",
-    "after": "node src/tool-runner-after.js",
     "workshop": "node src/tool-runner-workshop.js",
-    "solution": "node src/tool-runner-after.js",
+    "solution": "node solution/tool-runner-workshop.js",
+    "after": "node solution/tool-runner-workshop.js",
     "demo": "node src/scenarios.js demo",
     "clean": "node src/audit.js clean",
     "test": "node src/scenarios.js test"
