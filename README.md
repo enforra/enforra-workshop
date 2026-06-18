@@ -228,33 +228,60 @@ npm run workshop
 
 The important point: **you changed agent behavior by changing policy, not by rewriting the agent.**
 
-## Bonus exercise: add another risky tool
+## Bonus exercise: create a new policy rule
 
 _This is optional. Skip it if you are still working through the main exercise._
 
-If you finish early, try adding a new tool called `update_subscription`.
+If you finish early, try changing the policy for `update_subscription`.
 
-This simulates changing a customer’s billing plan.
+The goal is to make Enforra require approval only when the requested plan is `enterprise`.
 
-### Steps:
+Start by opening:
 
-1. Open `src/tools.js` and add the `update_subscription` tool.
-2. Open `src/agent.js` (which reads from `src/scenarios.js`) and add a planned call to `update_subscription` in the planned scenarios array.
-3. Open `policy.yaml` and add a rule that requires approval for `update_subscription`.
-4. Run:
+```bash
+policy.yaml
+```
+
+Find the existing `update_subscription` rule.
+
+Replace it with a more specific rule:
+
+```yaml
+- id: require-approval-for-enterprise-subscription
+  description: "Require approval for enterprise subscription changes"
+  match:
+    tool: update_subscription
+  conditions:
+    - field: args.plan
+      operator: eq
+      value: enterprise
+  decision: require_approval
+```
+
+Then run:
 
 ```bash
 npm run workshop
 ```
 
-If your integration is working, the new tool should pause before execution with:
+If your Enforra integration is complete, the `update_subscription` call should pause before execution with:
 
 ```text
 Enforra decision: require_approval
 ```
 
+Then try changing the plan in the planned tool call (inside `src/scenarios.js`) from `enterprise` to `starter` or `pro`. The decision should fall back to the default policy decision (`log_only` or whatever you configured).
+
+If you get stuck, compare your `policy.yaml` with:
+
+```bash
+solution/bonus-policy.yaml
+```
+
+Do not start in the `solution/` folder. It is only there as a reference.
+
 **Main lesson:**
-You can add new tool controls by changing policy, not by rewriting the whole agent.
+You changed what the agent is allowed to do by changing policy, not by rewriting the agent.
 
 ---
 
