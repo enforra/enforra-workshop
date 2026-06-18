@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Enforra Agent Runtime Control Workshop",
   "type": "module",
-  "main": "src/tool-runner-after.js",
+  "main": "solution/tool-runner-workshop.js",
   "scripts": {
     "before": "node src/tool-runner-before.js",
     "workshop": "node src/tool-runner-workshop.js",
