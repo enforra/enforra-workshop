@@ -228,6 +228,34 @@ npm run workshop
 
 The important point: **you changed agent behavior by changing policy, not by rewriting the agent.**
 
+## Bonus exercise: add another risky tool
+
+_This is optional. Skip it if you are still working through the main exercise._
+
+If you finish early, try adding a new tool called `update_subscription`.
+
+This simulates changing a customer’s billing plan.
+
+### Steps:
+
+1. Open `src/tools.js` and add the `update_subscription` tool.
+2. Open `src/agent.js` (which reads from `src/scenarios.js`) and add a planned call to `update_subscription` in the planned scenarios array.
+3. Open `policy.yaml` and add a rule that requires approval for `update_subscription`.
+4. Run:
+
+```bash
+npm run workshop
+```
+
+If your integration is working, the new tool should pause before execution with:
+
+```text
+Enforra decision: require_approval
+```
+
+**Main lesson:**
+You can add new tool controls by changing policy, not by rewriting the whole agent.
+
 ---
 
 ## Key Integration Point

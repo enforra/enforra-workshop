@@ -28,6 +28,12 @@ policies:
         value: 100
     decision: require_approval
 
+  - id: require-approval-for-subscription-changes
+    description: "Require approval for subscription changes"
+    match:
+      tool: update_subscription
+    decision: require_approval
+
   - id: block-customer-deletion
     description: "Block deletion of customer records entirely"
     match:

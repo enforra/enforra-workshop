@@ -24,6 +24,14 @@ export const scenarios = [
     },
   },
   {
+    tool: "update_subscription",
+    args: {
+      customerId: "cus_123",
+      plan: "enterprise",
+      reason: "requested by sales",
+    },
+  },
+  {
     tool: "delete_customer_data",
     args: {
       customerId: "cus_123",
@@ -59,6 +67,7 @@ if (process.argv[2] === "demo") {
       { tool: "issue_refund", amount: 20, decision: "allow" },
       { tool: "issue_refund", amount: 950, decision: "require_approval" },
       { tool: "send_email", decision: "log_only" },
+      { tool: "update_subscription", decision: "require_approval" },
       { tool: "delete_customer_data", decision: "block" },
     ];
 

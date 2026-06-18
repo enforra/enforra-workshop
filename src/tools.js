@@ -48,4 +48,16 @@ export const tools = {
       deletedAt: new Date().toISOString(),
     };
   },
+
+  update_subscription: async ({ customerId, plan, reason }) => {
+    console.log(
+      `[Tool Executed] update_subscription: Changed customer ${customerId} to ${plan} plan (Reason: "${reason}")`,
+    );
+    return {
+      success: true,
+      customerId,
+      plan,
+      updatedAt: new Date().toISOString(),
+    };
+  },
 };
