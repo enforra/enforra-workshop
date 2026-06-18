@@ -8,6 +8,12 @@ This workshop teaches one integration point: **find the place where your agent i
 
 The fake agent is only here to make the workshop predictable. The important part is where the runtime check is placed.
 
+In the hands-on part, you will edit one file:
+
+`src/tool-runner-workshop.js`
+
+You will add the runtime policy check before the tool executes.
+
 ---
 
 ## What you will build
@@ -109,9 +115,21 @@ Open `src/tool-runner-before.js` and locate the line where the selected tool is 
 
 Open `policy.yaml` and explain the decisions.
 
-### Step 4: Open the workshop exercise file
+### Step 4: Add runtime control
 
-Open `src/tool-runner-workshop.js` and follow the `TODO` comments to implement the Enforra policy evaluation and enforcement.
+Open:
+
+`src/tool-runner-workshop.js`
+
+This is the main hands-on exercise.
+
+You will fill in the TODOs to:
+
+* create the Enforra-style runtime
+* evaluate each tool call before execution
+* block blocked actions
+* pause actions that require approval
+* execute only allowed or logged actions
 
 ### Step 5: Run the workshop file
 
@@ -176,6 +194,8 @@ const decision = await enforra.evaluate({
   params: args
 })
 ```
+
+The exact SDK API may change as Enforra evolves. The important pattern stays the same: call Enforra before your agent executes the selected tool.
 
 ---
 
