@@ -7,7 +7,7 @@ const AUDIT_FILE = path.join(AUDIT_DIR, "audit.jsonl");
 /**
  * Appends an entry to the Enforra audit log (.enforra/audit.jsonl).
  * If the file or directory does not exist, they will be created.
- * 
+ *
  * @param {Object} entry
  * @param {string} entry.agentId
  * @param {string} entry.tool
@@ -17,7 +17,15 @@ const AUDIT_FILE = path.join(AUDIT_DIR, "audit.jsonl");
  * @param {boolean} entry.executed
  * @param {string} entry.reason
  */
-export function writeAuditLog({ agentId, tool, params, decision, matchedRule, executed, reason }) {
+export function writeAuditLog({
+  agentId,
+  tool,
+  params,
+  decision,
+  matchedRule,
+  executed,
+  reason,
+}) {
   // Ensure the directory exists
   if (!fs.existsSync(AUDIT_DIR)) {
     fs.mkdirSync(AUDIT_DIR, { recursive: true });
@@ -31,7 +39,7 @@ export function writeAuditLog({ agentId, tool, params, decision, matchedRule, ex
     decision,
     matchedRule,
     executed,
-    reason
+    reason,
   };
 
   fs.appendFileSync(AUDIT_FILE, JSON.stringify(auditEntry) + "\n", "utf8");

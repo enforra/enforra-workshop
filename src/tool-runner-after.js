@@ -12,7 +12,7 @@ export async function runAfter() {
   // Initialize the real Enforra SDK client
   const enforra = await createEnforraClient({
     policyPath: "./policy.yaml",
-    auditPath: ".enforra/audit.jsonl"
+    auditPath: ".enforra/audit.jsonl",
   });
 
   const plannedActions = getAgentPlannedActions();
@@ -29,7 +29,7 @@ export async function runAfter() {
         tool: toolName,
         args,
         context: {
-          environment: "workshop"
+          environment: "workshop",
         },
         execute: async () => {
           const toolFn = tools[toolName];
@@ -37,7 +37,7 @@ export async function runAfter() {
             return await toolFn(args);
           }
           throw new Error(`Unknown tool: ${toolName}`);
-        }
+        },
       });
 
       console.log(`Enforra decision: ${result.decision}`);

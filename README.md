@@ -6,7 +6,7 @@ A tiny local workshop showing how to put a runtime control check between an AI a
 
 This workshop teaches one integration point: **find the place where your agent is about to execute a tool, then check policy before that tool runs.**
 
-The fake agent is only here to make the workshop predictable. The Enforra SDK integration is real.
+This workshop installs the real `@enforra/sdk-node` package. The fake agent is only used so everyone gets the same tool calls. The real exercise is adding Enforra before tool execution.
 
 In the hands-on part, you will edit one file:
 
@@ -92,7 +92,7 @@ cd enforra-workshop
 npm install
 ```
 
-*Note: Running `npm install` installs the real `@enforra/sdk-node` package from the public npm registry.*
+_Note: Running `npm install` installs the real `@enforra/sdk-node` package from the public npm registry._
 
 ---
 
@@ -133,11 +133,11 @@ This is the main hands-on exercise.
 
 You will fill in the TODOs to:
 
-* Import the Enforra client from `@enforra/sdk-node`
-* Create the Enforra client using `policy.yaml` and `.enforra/audit.jsonl`
-* Wrap each tool call with `enforceToolCall`
-* Pass agent, tool, args, context, and execute callback
-* Print decision result and show whether the tool executed
+- Import the Enforra client from `@enforra/sdk-node`
+- Create the Enforra client using `policy.yaml` and `.enforra/audit.jsonl`
+- Wrap each tool call with `enforceToolCall`
+- Pass agent, tool, args, context, and execute callback
+- Print decision result and show whether the tool executed
 
 ### Step 5: Run the workshop file
 
@@ -167,9 +167,9 @@ The audit log shows what the agent tried to do, what decision was made, and whet
 
 Change one rule in `policy.yaml`:
 
-* Change the refund approval threshold from `100` to `500`.
-* Change `send_email` from `log_only` to `require_approval`.
-* Change the default decision from `log_only` to `block`.
+- Change the refund approval threshold from `100` to `500`.
+- Change `send_email` from `log_only` to `require_approval`.
+- Change the default decision from `log_only` to `block`.
 
 Then rerun the workshop:
 
@@ -186,18 +186,20 @@ The important point: **you changed agent behavior by changing policy, not by rew
 The main concept of this workshop is the placement of the policy check. Instead of executing tools immediately, evaluate the action with Enforra:
 
 **Before:**
+
 ```javascript
-await tools[toolName](args)
+await tools[toolName](args);
 ```
 
 **After (SDK Integration):**
+
 ```javascript
 const result = await enforra.enforceToolCall({
   agent: "support-agent",
   tool: toolName,
   args,
   context: { environment: "workshop" },
-  execute: async () => tools[toolName](args)
+  execute: async () => tools[toolName](args),
 });
 
 if (result.decision === "block") {

@@ -5,24 +5,31 @@ import fs from "node:fs";
 export const scenarios = [
   {
     tool: "get_customer",
-    args: { customerId: "cus_123" }
+    args: { customerId: "cus_123" },
   },
   {
     tool: "issue_refund",
-    args: { customerId: "cus_123", amount: 20, reason: "shipping delay" }
+    args: { customerId: "cus_123", amount: 20, reason: "shipping delay" },
   },
   {
     tool: "issue_refund",
-    args: { customerId: "cus_123", amount: 950, reason: "customer unhappy" }
+    args: { customerId: "cus_123", amount: 950, reason: "customer unhappy" },
   },
   {
     tool: "send_email",
-    args: { to: "customer@example.com", subject: "Refund Status Update", body: "Your refund request is being processed." }
+    args: {
+      to: "customer@example.com",
+      subject: "Refund Status Update",
+      body: "Your refund request is being processed.",
+    },
   },
   {
     tool: "delete_customer_data",
-    args: { customerId: "cus_123", reason: "GDPR right to be forgotten request" }
-  }
+    args: {
+      customerId: "cus_123",
+      reason: "GDPR right to be forgotten request",
+    },
+  },
 ];
 
 // If run directly (for npm run demo or npm test), execute the appropriate function
@@ -44,7 +51,7 @@ if (process.argv[2] === "demo") {
   import("@enforra/sdk-node").then(async ({ createEnforraClient }) => {
     const enforra = await createEnforraClient({
       policyPath: "./policy.yaml",
-      auditPath: ".enforra/audit.jsonl"
+      auditPath: ".enforra/audit.jsonl",
     });
 
     const expected = [
@@ -52,26 +59,30 @@ if (process.argv[2] === "demo") {
       { tool: "issue_refund", amount: 20, decision: "allow" },
       { tool: "issue_refund", amount: 950, decision: "require_approval" },
       { tool: "send_email", decision: "log_only" },
-      { tool: "delete_customer_data", decision: "block" }
+      { tool: "delete_customer_data", decision: "block" },
     ];
 
     let passed = true;
     for (let i = 0; i < scenarios.length; i++) {
       const scenario = scenarios[i];
       const exp = expected[i];
-      
+
       const result = await enforra.enforceToolCall({
         agent: "support-agent",
         tool: scenario.tool,
         args: scenario.args,
-        execute: async () => ({ status: "mock-executed" })
+        execute: async () => ({ status: "mock-executed" }),
       });
 
       if (result.decision !== exp.decision) {
-        console.error(`❌ Test failed for scenario ${i + 1} (${scenario.tool}): expected ${exp.decision}, got ${result.decision}`);
+        console.error(
+          `❌ Test failed for scenario ${i + 1} (${scenario.tool}): expected ${exp.decision}, got ${result.decision}`,
+        );
         passed = false;
       } else {
-        console.log(`✅ Scenario ${i + 1} (${scenario.tool}${scenario.args.amount ? ' amount=' + scenario.args.amount : ''}): ${result.decision} matched`);
+        console.log(
+          `✅ Scenario ${i + 1} (${scenario.tool}${scenario.args.amount ? " amount=" + scenario.args.amount : ""}): ${result.decision} matched`,
+        );
       }
     }
 

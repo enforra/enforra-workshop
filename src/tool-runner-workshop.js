@@ -11,7 +11,7 @@ export async function runWorkshop() {
 
   // TODO 2: Initialize the Enforra client using createEnforraClient
   // Pass policyPath: "./policy.yaml" and auditPath: ".enforra/audit.jsonl"
-  const enforra = null; 
+  const enforra = null;
 
   const plannedActions = getAgentPlannedActions();
 
@@ -49,7 +49,6 @@ export async function runWorkshop() {
       } else if (result.decision === "log_only") {
         console.log("Audit written.");
       }
-
     } catch (err) {
       console.error(`Evaluation/execution error: ${err.message}`);
     }
