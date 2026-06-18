@@ -244,7 +244,7 @@ policy.yaml
 
 Find the existing `update_subscription` rule.
 
-Replace it with a more specific rule:
+Replace it with a more specific rule (note that `eq` stands for "equals"):
 
 ```yaml
 - id: require-approval-for-enterprise-subscription
