@@ -7,6 +7,8 @@
   "scripts": {
     "before": "node src/tool-runner-before.js",
     "after": "node src/tool-runner-after.js",
+    "workshop": "node src/tool-runner-workshop.js",
+    "solution": "node src/tool-runner-after.js",
     "demo": "node src/scenarios.js demo",
     "clean": "node src/audit.js clean",
     "test": "node src/scenarios.js test"
