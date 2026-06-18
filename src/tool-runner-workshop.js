@@ -1,15 +1,15 @@
 import { getAgentPlannedActions } from "./agent.js";
 import { tools } from "./tools.js";
-// TODO 1: Import createEnforraClient from "./enforra-runtime.js"
+// TODO 1: Import createEnforraClient from "@enforra/sdk-node"
 
 /**
  * Runs the simulated agent scenarios through the Enforra runtime control layer.
- * Fill in the TODOs below to integrate Enforra policy checks!
+ * Fill in the TODOs below to integrate the real Enforra SDK!
  */
 export async function runWorkshop() {
   console.log("\nWITH ENFORRA RUNTIME CONTROL (WORKSHOP EXERCISE)\n");
 
-  // TODO 1: Initialize the local Enforra client using createEnforraClient
+  // TODO 2: Initialize the Enforra client using createEnforraClient
   // Pass policyPath: "./policy.yaml" and auditPath: ".enforra/audit.jsonl"
   const enforra = null; 
 
@@ -33,21 +33,21 @@ export async function runWorkshop() {
     }
 
     try {
-      // TODO 2: Evaluate the tool call before execution using enforra.evaluate
-      // Pass agentId: "support-agent", tool: toolName, params: args
-      const decision = { action: "allow" }; // Replace this with the actual evaluation call
+      // TODO 3: Wrap the tool call with enforra.enforceToolCall
+      // TODO 4: Pass agent, tool, args, context, and the execute callback
+      // The execute callback should execute the actual tool (e.g. tools[toolName](args))
+      const result = { decision: "allow" }; // Replace this with the enforra.enforceToolCall call
 
-      console.log(`Enforra decision: ${decision.action}`);
+      // TODO 5: Print the decision result (e.g., result.decision)
+      // and handle logging for 'block', 'require_approval', and 'log_only'
+      console.log(`Enforra decision: ${result.decision}`);
 
-      // TODO 3: If decision is block, log "Tool blocked. It did not execute." and do not run it.
-
-      // TODO 4: If decision is require_approval, log "Tool paused. Approval required before execution." and do not run it.
-
-      // TODO 5: If decision is allowed or log_only, execute the tool.
-      // If decision is log_only, write "Audit written."
-      const toolFn = tools[toolName];
-      if (toolFn) {
-        await toolFn(args);
+      if (result.decision === "block") {
+        console.log("Tool blocked. It did not execute.");
+      } else if (result.decision === "require_approval") {
+        console.log("Tool paused. Approval required before execution.");
+      } else if (result.decision === "log_only") {
+        console.log("Audit written.");
       }
 
     } catch (err) {

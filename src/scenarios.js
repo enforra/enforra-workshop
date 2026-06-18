@@ -41,7 +41,7 @@ if (process.argv[2] === "demo") {
 } else if (process.argv[2] === "test") {
   // Simple test suite evaluating decisions
   console.log("Running smoke tests...");
-  import("./enforra-runtime.js").then(async ({ createEnforraClient }) => {
+  import("@enforra/sdk-node").then(async ({ createEnforraClient }) => {
     const enforra = await createEnforraClient({
       policyPath: "./policy.yaml",
       auditPath: ".enforra/audit.jsonl"
@@ -60,17 +60,18 @@ if (process.argv[2] === "demo") {
       const scenario = scenarios[i];
       const exp = expected[i];
       
-      const evaluation = await enforra.evaluate({
-        agentId: "support-agent",
+      const result = await enforra.enforceToolCall({
+        agent: "support-agent",
         tool: scenario.tool,
-        params: scenario.args
+        args: scenario.args,
+        execute: async () => ({ status: "mock-executed" })
       });
 
-      if (evaluation.action !== exp.decision) {
-        console.error(`❌ Test failed for scenario ${i + 1} (${scenario.tool}): expected ${exp.decision}, got ${evaluation.action}`);
+      if (result.decision !== exp.decision) {
+        console.error(`❌ Test failed for scenario ${i + 1} (${scenario.tool}): expected ${exp.decision}, got ${result.decision}`);
         passed = false;
       } else {
-        console.log(`✅ Scenario ${i + 1} (${scenario.tool}${scenario.args.amount ? ' amount=' + scenario.args.amount : ''}): ${evaluation.action} matched`);
+        console.log(`✅ Scenario ${i + 1} (${scenario.tool}${scenario.args.amount ? ' amount=' + scenario.args.amount : ''}): ${result.decision} matched`);
       }
     }
 

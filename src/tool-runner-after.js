@@ -1,15 +1,15 @@
 import { getAgentPlannedActions } from "./agent.js";
 import { tools } from "./tools.js";
-import { createEnforraClient } from "./enforra-runtime.js";
+import { createEnforraClient } from "@enforra/sdk-node";
 
 /**
  * Runs the simulated agent scenarios through the Enforra runtime control layer.
- * Evaluates decisions based on policy.yaml and logs audit records to .enforra/audit.jsonl.
+ * Evaluates decisions using the real @enforra/sdk-node package based on policy.yaml.
  */
 export async function runAfter() {
   console.log("\nWITH ENFORRA RUNTIME CONTROL\n");
 
-  // Initialize the local Enforra client wrapper
+  // Initialize the real Enforra SDK client
   const enforra = await createEnforraClient({
     policyPath: "./policy.yaml",
     auditPath: ".enforra/audit.jsonl"
@@ -23,30 +23,31 @@ export async function runAfter() {
     console.log(`Agent wants to call: ${toolName}${amountStr}`);
 
     try {
-      // Evaluate policy rules before execution
-      const decision = await enforra.evaluate({
-        agentId: "support-agent",
+      // Enforce policies before tool execution using the SDK
+      const result = await enforra.enforceToolCall({
+        agent: "support-agent",
         tool: toolName,
-        params: args
+        args,
+        context: {
+          environment: "workshop"
+        },
+        execute: async () => {
+          const toolFn = tools[toolName];
+          if (toolFn) {
+            return await toolFn(args);
+          }
+          throw new Error(`Unknown tool: ${toolName}`);
+        }
       });
 
-      console.log(`Enforra decision: ${decision.action}`);
+      console.log(`Enforra decision: ${result.decision}`);
 
-      if (decision.action === "block") {
+      if (result.decision === "block") {
         console.log("Tool blocked. It did not execute.");
-      } else if (decision.action === "require_approval") {
+      } else if (result.decision === "require_approval") {
         console.log("Tool paused. Approval required before execution.");
-      } else if (decision.action === "log_only") {
-        const toolFn = tools[toolName];
-        if (toolFn) {
-          await toolFn(args);
-        }
+      } else if (result.decision === "log_only") {
         console.log("Audit written.");
-      } else if (decision.action === "allow") {
-        const toolFn = tools[toolName];
-        if (toolFn) {
-          await toolFn(args);
-        }
       }
     } catch (err) {
       console.error(`Evaluation/execution error: ${err.message}`);

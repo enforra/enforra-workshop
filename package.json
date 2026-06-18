@@ -14,7 +14,7 @@
     "test": "node src/scenarios.js test"
   },
   "dependencies": {
-    "yaml": "^2.4.5"
+    "@enforra/sdk-node": "^0.2.1"
   },
   "engines": {
     "node": ">=20.0.0"

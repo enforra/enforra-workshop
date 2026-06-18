@@ -6,13 +6,13 @@ A tiny local workshop showing how to put a runtime control check between an AI a
 
 This workshop teaches one integration point: **find the place where your agent is about to execute a tool, then check policy before that tool runs.**
 
-The fake agent is only here to make the workshop predictable. The important part is where the runtime check is placed.
+The fake agent is only here to make the workshop predictable. The Enforra SDK integration is real.
 
 In the hands-on part, you will edit one file:
 
 `src/tool-runner-workshop.js`
 
-You will add the runtime policy check before the tool executes.
+You will add the Enforra SDK check before the tool executes.
 
 ---
 
@@ -31,7 +31,7 @@ First, you will run the workflow without runtime control.
 
 Then you will run the same workflow with a policy check before tool execution.
 
-The goal is to see how Enforra-style runtime control can decide:
+The goal is to see how Enforra runtime control can decide:
 
 - allow
 - log_only
@@ -69,9 +69,6 @@ find the line where the selected tool is about to execute, then check policy bef
 - `src/tool-runner-after.js`  
   Runs the agent with a policy check before tool execution (completed version).
 
-- `src/enforra-runtime.js`  
-  A tiny local Enforra-style runtime adapter for the workshop.
-
 - `policy.yaml`  
   The runtime policy.
 
@@ -94,6 +91,17 @@ git clone https://github.com/enforra/enforra-workshop.git
 cd enforra-workshop
 npm install
 ```
+
+*Note: Running `npm install` installs the real `@enforra/sdk-node` package from the public npm registry.*
+
+---
+
+## Where the SDK is used
+
+- **Attendee Exercise File**: `src/tool-runner-workshop.js`  
+  You will import and configure `@enforra/sdk-node` here.
+- **Reference Solution**: `src/tool-runner-after.js`  
+  A completed reference implementation of the Enforra SDK.
 
 ---
 
@@ -125,11 +133,11 @@ This is the main hands-on exercise.
 
 You will fill in the TODOs to:
 
-* create the Enforra-style runtime
-* evaluate each tool call before execution
-* block blocked actions
-* pause actions that require approval
-* execute only allowed or logged actions
+* Import the Enforra client from `@enforra/sdk-node`
+* Create the Enforra client using `policy.yaml` and `.enforra/audit.jsonl`
+* Wrap each tool call with `enforceToolCall`
+* Pass agent, tool, args, context, and execute callback
+* Print decision result and show whether the tool executed
 
 ### Step 5: Run the workshop file
 
@@ -173,26 +181,28 @@ The important point: **you changed agent behavior by changing policy, not by rew
 
 ---
 
-## Using the real Enforra SDK in your own app
+## Key Integration Point
 
-This workshop uses a tiny local Enforra-style adapter so everyone can run the exercise without API keys, cloud setup, or SDK version issues.
+The main concept of this workshop is the placement of the policy check. Instead of executing tools immediately, evaluate the action with Enforra:
 
-In a real app, the pattern is the same. You install the Enforra SDK, create a client, and call Enforra before tool execution.
-
-### Conceptual Example
-
-First, install the SDK:
-```bash
-npm install @enforra/sdk-node
+**Before:**
+```javascript
+await tools[toolName](args)
 ```
 
-Then, evaluate decisions before tool execution:
+**After (SDK Integration):**
 ```javascript
-const decision = await enforra.evaluate({
-  agentId: "support-agent",
+const result = await enforra.enforceToolCall({
+  agent: "support-agent",
   tool: toolName,
-  params: args
-})
+  args,
+  context: { environment: "workshop" },
+  execute: async () => tools[toolName](args)
+});
+
+if (result.decision === "block") {
+  // handle block
+}
 ```
 
 The exact SDK API may change as Enforra evolves. The important pattern stays the same: call Enforra before your agent executes the selected tool.
