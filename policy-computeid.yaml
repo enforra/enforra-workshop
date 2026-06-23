@@ -1,0 +1,62 @@
+version: 1
+defaults:
+  decision: log_only
+
+policies:
+  - id: allow-read-for-verified-active-agent
+    description: "Allow customer lookup when AgentPassport is active and has read capability"
+    match:
+      tool: get_customer
+    conditions:
+      - field: context.agent_passport.status
+        operator: eq
+        value: active
+      - field: context.agent_passport.capabilities
+        operator: contains
+        value: read
+    decision: allow
+
+  - id: allow-api-call-for-verified-agent
+    description: "Allow normal API calls when AgentPassport includes api_call"
+    match:
+      tool: send_email
+    conditions:
+      - field: context.agent_passport.status
+        operator: eq
+        value: active
+      - field: context.agent_passport.capabilities
+        operator: contains
+        value: api_call
+    decision: log_only
+
+  - id: refund-requires-billing-write
+    description: "Refunds require a stronger billing_write capability"
+    match:
+      tool: issue_refund
+    conditions:
+      - field: context.agent_passport.status
+        operator: eq
+        value: active
+      - field: context.agent_passport.capabilities
+        operator: contains
+        value: billing_write
+    decision: allow
+
+  - id: refund-without-billing-write-needs-approval
+    description: "Active passport without billing_write must pause for human approval on refunds"
+    match:
+      tool: issue_refund
+    conditions:
+      - field: context.agent_passport.status
+        operator: eq
+        value: active
+    decision: require_approval
+
+  - id: block-inactive-or-revoked-passport
+    description: "Block actions if passport is not active or has been revoked"
+    match: {}
+    conditions:
+      - field: context.agent_passport.status
+        operator: neq
+        value: active
+    decision: block

@@ -1,6 +1,6 @@
 import { getAgentPlannedActions } from "./agent.js";
 import { tools } from "./tools.js";
-// TODO 1: Import { createEnforraClient } from "@enforra/sdk-node"
+import { createEnforraClient } from "@enforra/sdk-node";
 
 /**
  * Runs the simulated agent scenarios through the Enforra runtime control layer.
@@ -16,7 +16,13 @@ export async function runWorkshop() {
 
   // TODO 2: Initialize the Enforra client using createEnforraClient
   // Pass policyPath: "./policy.yaml" and auditPath: ".enforra/audit.jsonl"
-  const enforra = null;
+
+  const enforra = await createEnforraClient({
+    policyPath: "./policy.yaml",
+    auditPath: ".enforra/audit.jsonl",
+  });
+
+  //const enforra = null;
 
   const plannedActions = getAgentPlannedActions();
 
@@ -27,7 +33,7 @@ export async function runWorkshop() {
 
     // Temporary code so the script runs before integration is completed.
     // REMOVE or comment out this block when implementing your TODOs below!
-    if (!enforra) {
+    /* if (!enforra) {
       console.log("(Enforra integration pending...)");
       const toolFn = tools[toolName];
       if (toolFn) {
@@ -35,21 +41,29 @@ export async function runWorkshop() {
       }
       console.log("");
       continue;
-    }
+    }*/
 
     try {
       // TODO 3: Replace this fake result with enforra.enforceToolCall(...)
       //
-      // Pass:
-      // - agent: "support-agent"
-      // - tool: toolName
-      // - args
-      // - context: { environment: "workshop" }
-      // - execute: an async callback that runs the actual tool
-      //
-      // The important part:
-      // the real tool call should happen inside execute, not before Enforra checks policy.
-      const result = { decision: "allow" };
+      const result = await enforra.enforceToolCall({
+        agent: "support-agent",
+        tool: toolName,
+        args,
+        context: {
+          environment: "workshop",
+        },
+        execute: async () => {
+          const toolFn = tools[toolName];
+
+          if (toolFn) {
+            return await toolFn(args);
+          }
+
+          throw new Error(`Unknown tool: ${toolName}`);
+        },
+      });
+      //const result = { decision: "allow" };
 
       // Print the Enforra decision and explain what happened.
       console.log(`Enforra decision: ${result.decision}`);

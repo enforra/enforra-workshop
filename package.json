@@ -11,7 +11,8 @@
     "after": "node solution/tool-runner-workshop.js",
     "demo": "node src/scenarios.js demo",
     "clean": "node src/audit.js clean",
-    "test": "node src/scenarios.js test"
+    "test": "node src/scenarios.js test",
+    "computeid": "node src/tool-runner-computeid.js"
   },
   "dependencies": {
     "@enforra/sdk-node": "^0.2.1"

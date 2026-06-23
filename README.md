@@ -283,6 +283,31 @@ Do not start in the `solution/` folder. It is only there as a reference.
 **Main lesson:**
 You changed what the agent is allowed to do by changing policy, not by rewriting the agent.
 
+## Optional demo: ComputeID AgentPassport as trusted policy input
+
+ComputeID answers:
+"Who is this agent, and is it really who it claims to be?"
+
+Enforra answers:
+"Should this verified agent be allowed to perform this specific action right now?"
+
+This demo verifies an AgentPassport, passes verified claims into Enforra policy as `context.agent_passport`, and then controls tool execution based on those claims.
+
+Without ComputeID, Enforra enforces policy based on declared agent context. With ComputeID, Enforra enforces policy based on verified identity and signed capabilities.
+
+To run the demo:
+
+```bash
+npm run computeid
+```
+
+Files involved in the demo:
+
+- `src/computeid-passport.js` - Mock verifier of cryptographic signatures/AgentPassport.
+- `src/tool-runner-computeid.js` - Runs the demo scenarios showing AgentPassport verification and Enforra integration.
+- `src/scenarios-computeid.js` - Mock scenarios for the ComputeID demo.
+- `policy-computeid.yaml` - Policy configured with passport capabilities & revocation status conditions.
+
 ---
 
 ## Key Integration Point
