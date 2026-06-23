@@ -22,8 +22,6 @@ export function verifyAgentPassport(passport) {
     };
   }
 
-  // For compatibility with the Enforra policy-core 'contains' operator (which evaluates strings),
-  // we serialize the capabilities array into a comma-separated string.
   const capabilitiesStr = Array.isArray(passport.capabilities)
     ? passport.capabilities.join(",")
     : passport.capabilities || "";
